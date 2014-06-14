@@ -1,14 +1,19 @@
-# strict-map
+# Strictly
 
-A Clojure library designed to ... well, that part is up to you.
+Utilities for a less tolerant Clojure.
 
 ## Usage
 
-FIXME
+This is still an experimental library. It is liable to change dramatically, or become unmaintained if I lose interest.
 
-## License
+If you want to use it, include it in your `project.clj` file to download it from Clojars:
 
-Copyright © 2014 FIXME
+    [strictly "0.1.0-SNAPSHOT"]
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Apply the `strict` function from the `map` namespace to create a map that throws an Exception if a key that does not exist is retrieved. This is in contract to Clojure's default behaviour of returning `nil` in such cases.
+
+See [the tests](https://github.com/ctford/strictly/blob/master/test/strictly/map_test.clj) for example usages.
+
+## Licence
+
+Copyright © 2014 Chris Ford 
