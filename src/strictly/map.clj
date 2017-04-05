@@ -59,18 +59,18 @@
             :otherwise
               v))))
 
-(defn branch?
+(defn ^:private branch?
   "Return true if the node coll contains a map as its key"
   [coll]
   (-> coll last map?))
 
-(defn children
+(defn ^:private children
   "Returns a sequence of node paths for children"
   [coll]
   (let [path (butlast coll) m (last coll) ]
     (map #(concat path %) m)))
 
-(defn node-paths
+(defn ^:private node-paths
   "Returns a sequence of node paths for a given map"
   [m]
   (->> m
@@ -78,15 +78,15 @@
        (tree-seq branch? children)
        (remove (comp map? last))))
 
-(defn invalid-values
+(defn ^:private invalid-values
   "Returns a lazy sequence of the items in a coll of node paths that
   contains nil values"
   [coll]
   (filter (comp nil? last) coll))
 
-(def error-msg (partial str "Invalid values: "))
+(def ^:private error-msg (partial str "Invalid values: "))
 
-(defn nil-value-check
+(defn ^:private nil-value-check
   "Throws an Exception if the map contains nil values"
   [m]
   (let [nodes (->> m node-paths invalid-values)]
