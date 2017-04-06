@@ -4,5 +4,5 @@
   :license {:name "MIT License"}
   :dependencies	[[org.clojure/clojure "1.5.1"]]
   :profiles {:dev
-             {:plugins [[lein-midje "3.1.3"] ]
-              :dependencies [[midje "1.6.3"]]}})
+             {:plugins [[lein-midje "3.2.1"] ]
+              :dependencies [[midje "1.8.3"]]}})
