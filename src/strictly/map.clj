@@ -79,22 +79,24 @@
        (remove (comp map? last))))
 
 (defn ^:private invalid-values
-  "Returns a lazy sequence of the items in a coll of node paths that
-  contains nil values"
-  [coll]
-  (filter (comp nil? last) coll))
+  "Returns a lazy sequence of the items in a coll of node paths for which (pred
+  item) returns true"
+  [coll pred]
+  (filter (comp pred last) coll))
 
 (def ^:private error-msg (partial str "Invalid values: "))
 
-(defn ^:private nil-value-check
-  "Throws an Exception if the map contains nil values"
-  [m]
-  (let [nodes (->> m node-paths invalid-values)]
+(defn restriction
+  "Throws an Exception if the map contains values for which (pred item) returns true"
+  [m pred]
+  (let [nodes (-> m node-paths (invalid-values pred))]
     (if (-> nodes empty? not)
       (throw (new RuntimeException(error-msg (apply str nodes))))
       m)))
 
 (defn strict
   "Convert an ordinary map into one that throws an Exception if an
-  unknown key is requested. Ensures no nil values are defined"
-  [m] (-> m nil-value-check StrictMap.))
+  unknown key is requested. If pred is supplied an Exception will be thrown if
+  the map contains values for which (pred item) returns true"
+  ([m pred] (-> m (restriction pred) StrictMap.))
+  ([m] (-> m identity StrictMap.)))

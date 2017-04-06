@@ -1,12 +1,6 @@
 (ns strictly.map-test
   (:require [midje.sweet :refer :all]
-            [strictly.map :refer [strict]]))
-
-(fact "Attempting to apply a strict map to a map containing nil values throws an exception"
-      (-> {:key :value} strict) => {:key :value}
-      (-> {:key :value :nested {:foo :bar}} strict) => {:key :value :nested {:foo :bar}}
-      (-> {:key nil} strict) => (throws RuntimeException)
-      (-> {:key :value :nested {:foo nil}} strict) => (throws RuntimeException))
+            [strictly.map :refer [strict restriction]]))
 
 (fact "Attempting to get a missing key from a strict map throws an exception."
       (-> {:key :value} strict :key) => :value
@@ -27,3 +21,10 @@
       (-> {:key :value} strict :foo) => (throws RuntimeException)
       (-> {:key :value :nested {:foo :bar}} strict :nested :baz) => (throws RuntimeException)
       (-> {:key :value :nested {:foo :bar}} strict (:nested :default) :baz) => (throws RuntimeException))
+
+(def stricter #(strict % nil?))
+(fact "Attempting to apply a strict map to a map containing nil values throws an exception"
+      (-> {:key :value} stricter) => {:key :value}
+      (-> {:key :value :nested {:foo :bar}} stricter) => {:key :value :nested {:foo :bar}}
+      (-> {:key nil} stricter) => (throws RuntimeException)
+      (-> {:key :value :nested {:foo nil}} stricter) => (throws RuntimeException))
